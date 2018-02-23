@@ -24,7 +24,6 @@ Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):en
 
 % Setup some useful variables
 m = size(X, 1);
-size(X)
          
 % You need to return the following variables correctly 
 J = 0;
@@ -44,19 +43,30 @@ Theta2_grad = zeros(size(Theta2));
 %         computed in ex4.m
 %
 total = 0;
-for i = 1 : m
-    a1 = [1, X(i,:)]';
-    z2 = Theta1 * a1;
-    a2 = [1; sigmoid(z2)];
-    a3 = zeros(10, 1);
-    check(i, size(a1));
-    check(i, size(a2));
-    check(i, size(a3));
-    a3 = sigmoid(Theta2 * a2);
-    actualResult = [1:10] == y(i);
-    cost = -actualResult * log(a3) - (1 - actualResult)*log(1-a3);
-    total = total + cost;
+% for i = 1 : m
+%     a1 = [1, X(i,:)]';
+%     z2 = Theta1 * a1;
+%     a2 = [1; sigmoid(z2)];
+%     a3 = zeros(10, 1);
+%     a3 = sigmoid(Theta2 * a2);
+%     actualResult = [1:num_labels] == y(i);
+%     cost = -actualResult * log(a3) - (1 - actualResult)*log(1-a3);
+%     total = total + cost;
+% end
+a1 = [ones(size(X, 1), 1), X];
+z2 = a1 * Theta1';
+a2 = [ones(size(z2, 1), 1), sigmoid(z2)];
+a3 = sigmoid(a2 * Theta2');
+actualResult = [1: num_labels];
+for i=1:m-1
+    actualResult = [actualResult; [1:num_labels]];
 end
+for i=1:m
+    actualResult(i, :) = actualResult(i, :) == y(i);
+end
+costMatrix = -actualResult .* log(a3) - (1 - actualResult).*log(1-a3);
+total = sum(sum(costMatrix));
+
 J = total/m;
 
 
