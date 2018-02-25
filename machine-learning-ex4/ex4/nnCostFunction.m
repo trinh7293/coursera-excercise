@@ -44,15 +44,15 @@ Theta2_grad = zeros(size(Theta2));
 %
 total = 0;
 for i = 1 : m
-    a1 = [1; X(i,:)'];
-    z2 = Theta1 * a1;
-    a2 = [1; sigmoid(z2)];
-    a3 = sigmoid(Theta2 * a2);
-    actualResult = [1:num_labels] == y(i);
-    cost = -actualResult * log(a3) - (1 - actualResult)*log(1-a3);
-    total = total + cost;
+  a1 = [1; X(i,:)'];
+  z2 = Theta1 * a1;
+  a2 = [1; sigmoid(z2)];
+  a3 = sigmoid(Theta2 * a2);
+  actualResult = [1:num_labels] == y(i);
+  cost = -actualResult * log(a3) - (1 - actualResult)*log(1-a3);
+  total = total + cost;
 
-    delta_3 = a3 - actualResult';
+  delta_3 = a3 - actualResult';
 	delta_2 = Theta2'*delta_3.*sigmoidGradient([1; z2]);
 	delta_2 = delta_2(2:end);
 
