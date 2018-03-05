@@ -24,6 +24,30 @@ sigma = 0.3;
 %
 
 
+Ctest = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
+sigmatest = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30];
+errorstore = 0;
+istore = 0;
+jstore = 0;
+for i = 1:8
+	for j = 1:8
+		model = svmTrain(X, y, Ctest(i), @(x1, x2) gaussianKernel(x1, x2, sigmatest(j)));
+		predictions = svmPredict(model, Xval);
+		error = mean(double(predictions ~= yval));
+		if i == 1 && j == 1
+			errorstore = error
+			istore = i; 
+			jstore = j;
+		else if error < errorstore
+		 	errorstore = error;
+			istore = i; 
+			jstore = j;
+		end
+	end
+end
+
+C = Ctest(istore);
+sigma = sigmatest(jstore);
 
 
 
